@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace CompositePatternFileExample
 {
@@ -6,6 +7,33 @@ namespace CompositePatternFileExample
     class Program
     {
         static void Main(string[] args)
+        {
+            CompositeWithBuilder();
+
+        }
+
+        private static void CompositeWithBuilder()
+        {
+            var builder = new FileSystemBuilder("development");
+            builder.AddDirectory("Project 1");
+            builder.AddFile("p1f1", 2100);
+            builder.AddFile("p1f2", 3100);
+            builder.AddDirectory("sub-dir");
+            builder.AddFile("p1f3", 1100);
+            builder.AddFile("p1f4", 4100);
+
+            builder.SetCurrentDirectory("development");
+
+
+            builder.AddDirectory("Project 2");
+            builder.AddFile("p2f1", 1100);
+            builder.AddFile("p2f2", 4100);
+
+            Console.WriteLine($"Total Size(root): {builder.Root.GetSizeInKb()}");
+            Console.WriteLine(JsonConvert.SerializeObject(builder.Root, Formatting.Indented));
+        }
+
+        private static void SimpleCompisite()
         {
             var root = new Directory("Development");
             var prj1 = new Directory("Project 1");
